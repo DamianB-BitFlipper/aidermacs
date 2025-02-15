@@ -569,7 +569,8 @@ If Magit is not installed, report that it is required."
 
 ;;;###autoload
 (defun aidermacs--form-prompt (command prompt-prefix &optional ignore-context)
-  "Get command based on context with COMMAND and PROMPT-PREFIX.
+  "Form a prompt based on COMMAND, PROMPT-PREFIX and optional context.
+If COMMAND is nil, do not include it in the prompt.
 If IGNORE-CONTEXT is non-nil, skip function and region context.
 If region is active, use that region's text.
 If point is in a function, use function name."
