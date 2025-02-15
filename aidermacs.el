@@ -163,7 +163,8 @@ This function can be customized or redefined by the user."
     (">" "Send Block or Region" aidermacs-send-block-or-region)
     ("SPC" "Send Text" aidermacs-send-text)
     ("y" "Yes" aidermacs-yes)
-    ("n" "No" aidermacs-no)]
+    ("n" "No" aidermacs-no)
+    ("C" "Cancel" aidermacs-cancel)]
 
    ["Tools"
     ("f" "File Commands" aidermacs-transient-file-commands)

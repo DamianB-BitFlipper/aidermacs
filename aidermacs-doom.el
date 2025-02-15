@@ -32,6 +32,7 @@
            :desc "Send Text" "SPC" #'aidermacs-send-text
            :desc "Yes" "y" #'aidermacs-yes
            :desc "No" "n" #'aidermacs-no
+           :desc "Cancel" "C" #'aidermacs-cancel
            :desc "Undo Change" "u" #'aidermacs-undo-last-change
 
            ;; File Commands
