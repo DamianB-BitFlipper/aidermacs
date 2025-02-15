@@ -415,13 +415,13 @@ wrap it in {aidermacs\nstr\naidermacs}. Otherwise return STR unchanged."
 
 ;; Function to send a custom command to corresponding aidermacs buffer
 ;;;###autoload
-(defun aidermacs-send-text (submit)
+(defun aidermacs-send-text (&optional submit)
   "Send arbitrary text to the aidermacs buffer.
 Prompts for user input and sends the entered text directly to aider.
 It can be a /command or any text.
 
-The SUBMIT parameter determines if the text should be submitted immediately (t)
-or just added to the input buffer without submission (nil)."
+When SUBMIT is non-nil, the text will be submitted immediately.
+Otherwise, it will just be added to the input buffer without submission."
   (interactive (list nil))  ; Default to nil when called interactively
   (let ((text (aidermacs-read-string "Enter text to send: ")))
     (aidermacs--send-command text submit)))
