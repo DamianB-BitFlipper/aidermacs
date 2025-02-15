@@ -354,6 +354,8 @@ If the current buffer is already the aidermacs buffer, do nothing."
   ;; The command is an empty string, but set submit to true to trigger aider execution
   (aidermacs--send-command "" t))
 
+DO THIS HERE
+
 (defun aidermacs--process-message-if-multi-line (str)
   "Entering multi-line chat messages
 https://aidermacs.chat/docs/usage/commands.html#entering-multi-line-chat-messages
