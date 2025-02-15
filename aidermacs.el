@@ -158,7 +158,9 @@ This function can be customized or redefined by the user."
     ("X" "Exit Session" aidermacs-exit)
     ("<return>" "Submit in Session" aidermacs-submit)
     ("g" "Code Go Ahead" aidermacs-code-go-ahead)
-    ("s" "Commit" aidermacs-commit)]
+    ("s" "Commit" aidermacs-commit)
+    ("." "Send Line or Region" aidermacs-send-line-or-region)
+    (">" "Send Block or Region" aidermacs-send-block-or-region)]
 
    ["Tools"
     ("f" "File Commands" aidermacs-transient-file-commands)
@@ -609,7 +611,7 @@ If point is in a function, use function name."
                             (format " function `%s`" on-function))
                           (when region-text
                             (format " on the following code block:\n```\n%s\n```\n" region-text))))
-         (prompt (concat (when command 
+         (prompt (concat (when command
                            (concat command " "))
                          prompt-prefix
                          context
