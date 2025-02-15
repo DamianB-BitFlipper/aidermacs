@@ -356,6 +356,8 @@ If the current buffer is already the aidermacs buffer, do nothing."
   ;; The command is an empty string, but set submit to true to trigger aider execution
   (aidermacs--send-command "" t))
 
+HERE HERE HERE
+
 ;;;###autoload
 (defun aidermacs-yes ()
   "Send \"Yes\" to the aidermacs buffer and submit."
