@@ -630,7 +630,7 @@ Keep selecting files until C-g is pressed."
     (condition-case nil
         (when-let ((file (expand-file-name (read-file-name "Select file to add (C-g to finish): "))))
           (if (file-exists-p file)
-              (aidermacs--send-command (concat "/add " file) t)
+              (aidermacs--send-command (concat "/add " file))
             (message "File does not exist: %s" file)))
       (quit (keyboard-quit)))))
 
