@@ -70,8 +70,10 @@
            :desc "Aider Help" "h" #'aidermacs-help
 
            ;; Mode Commands
-
-           ))))
+           (:prefix ("M" . "Mode Commands")
+            :desc "Set Architect Mode" "a" #'aidermacs-set-architect-mode
+            :desc "Set Ask Mode" "?" #'aidermacs-set-ask-mode
+            :desc "Set Code Mode" "c" #'aidermacs-set-code-mode)))))
 
 ;; Add the setup function to appropriate hooks
 (add-hook 'find-file-hook #'aidermacs-doom-setup-keys)
