@@ -356,7 +356,14 @@ If the current buffer is already the aidermacs buffer, do nothing."
   ;; The command is an empty string, but set submit to true to trigger aider execution
   (aidermacs--send-command "" t))
 
-HERE HERE HERE
+;;;###autoload
+(defun aidermacs-cancel ()
+  "Send Ctrl-C to cancel the current operation in the aidermacs buffer."
+  (interactive)
+  (let ((buffer (get-buffer (aidermacs-buffer-name))))
+    (if buffer
+        (aidermacs--send-cancel-backend buffer)
+      (message "No active aidermacs buffer found."))))
 
 ;;;###autoload
 (defun aidermacs-yes ()
