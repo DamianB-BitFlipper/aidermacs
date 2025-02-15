@@ -247,7 +247,8 @@ This allows for multi-line input without sending the command."
         (font-lock-add-keywords nil aidermacs-font-lock-keywords t)))))
 
 (defun aidermacs--send-command-comint (buffer command submit)
-  "Send COMMAND to the aidermacs comint BUFFER."
+  "Send COMMAND to the aidermacs comint BUFFER.
+When SUBMIT is non-nil, append a newline to submit the command."
   (with-current-buffer buffer
     (let ((process (get-buffer-process buffer))
           (inhibit-read-only t))
@@ -258,7 +259,9 @@ This allows for multi-line input without sending the command."
                           'font-lock-face 'aidermacs-command-text
                           'rear-nonsticky t))
       (set-marker (process-mark process) (point))
-      (comint-send-string process (concat command "\n")))))
+      (comint-send-string process (if submit
+                                     (concat command "\n")
+                                   command)))))
 
 (defun aidermacs--send-command-redirect-comint (buffer command)
   "Send COMMAND to the aidermacs comint BUFFER and collect result into OUTPUT-BUFFER."
