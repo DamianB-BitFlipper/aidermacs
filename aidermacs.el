@@ -416,11 +416,11 @@ wrap it in {aidermacs\nstr\naidermacs}. Otherwise return STR unchanged."
 ;;;###autoload
 (defun aidermacs-send-text ()
   "Send arbitrary text to the aidermacs buffer.
-Prompts for user input and sends the entered text directly to aider."
+Prompts for user input and sends the entered text directly to aider.
+It can be a /command or any text. The text is not submitted."
   (interactive)
   (let ((text (aidermacs-read-string "Enter text to send: ")))
-    ;; Use the shared helper function to send the command
-    (aidermacs--send-command text t)))
+    (aidermacs--send-command text nil)))
 
 ;; New function to get command from user and send it prefixed with "/code "
 ;;;###autoload
