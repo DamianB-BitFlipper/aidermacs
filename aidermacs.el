@@ -160,7 +160,8 @@ This function can be customized or redefined by the user."
     ("g" "Code Go Ahead" aidermacs-code-go-ahead)
     ("s" "Commit" aidermacs-commit)
     ("." "Send Line or Region" aidermacs-send-line-or-region)
-    (">" "Send Block or Region" aidermacs-send-block-or-region)]
+    (">" "Send Block or Region" aidermacs-send-block-or-region)
+    ("SPC" "Send Text" aidermacs-send-text)]
 
    ["Tools"
     ("f" "File Commands" aidermacs-transient-file-commands)

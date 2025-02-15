@@ -29,6 +29,7 @@
            :desc "Submit in Session" "RET" #'aidermacs-submit
            :desc "Code Go Ahead" "g" #'aidermacs-code-go-ahead
            :desc "Commit" "s" #'aidermacs-commit
+           :desc "Send Text" "SPC" #'aidermacs-send-text
            :desc "Undo Change" "u" #'aidermacs-undo-last-change
 
            ;; File Commands
