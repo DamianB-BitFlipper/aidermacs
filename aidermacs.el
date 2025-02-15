@@ -355,7 +355,8 @@ If the current buffer is already the aidermacs buffer, do nothing."
   "Trigger execution in the aidermacs buffer."
   (interactive)
   ;; The command is an empty string, but set submit to true to trigger aider execution
-  (aidermacs--send-command "" t))
+  (aidermacs--send-command "" t)
+  (message "Submitted"))
 
 ;;;###autoload
 (defun aidermacs-cancel ()
