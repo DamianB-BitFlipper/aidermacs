@@ -161,7 +161,9 @@ This function can be customized or redefined by the user."
     ("s" "Commit" aidermacs-commit)
     ("." "Send Line or Region" aidermacs-send-line-or-region)
     (">" "Send Block or Region" aidermacs-send-block-or-region)
-    ("SPC" "Send Text" aidermacs-send-text)]
+    ("SPC" "Send Text" aidermacs-send-text)
+    ("y" "Yes" aidermacs-yes)
+    ("n" "No" aidermacs-no)]
 
    ["Tools"
     ("f" "File Commands" aidermacs-transient-file-commands)
