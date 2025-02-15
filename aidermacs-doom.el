@@ -25,6 +25,7 @@
            :desc "Change Model" "o" #'aidermacs-change-model
            :desc "Reset Session" "R" #'aidermacs-reset
            :desc "Exit Session" "x" #'aidermacs-exit
+           :desc "Submit in Session" "RET" #'aidermacs-submit
 
            ;; Quick Actions
            :desc "Add Current File" "f" #'aidermacs-add-current-file
