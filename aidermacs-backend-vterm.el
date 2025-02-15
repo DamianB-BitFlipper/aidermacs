@@ -93,11 +93,13 @@ and BUFFER-NAME is the name of the vterm buffer."
         (advice-add 'vterm-send-return :around #'aidermacs--vterm-output-advice))))
   buffer-name)
 
-(defun aidermacs--send-command-vterm (buffer command)
-  "Send COMMAND to the aidermacs vterm BUFFER."
+(defun aidermacs--send-command-vterm (buffer command submit)
+  "Send COMMAND to the aidermacs vterm BUFFER.
+When SUBMIT is non-nil, send a return after the command."
   (with-current-buffer buffer
     (vterm-send-string command)
-    (vterm-send-return)))
+    (when submit
+      (vterm-send-return))))
 
 (provide 'aidermacs-backend-vterm)
 

@@ -25,7 +25,7 @@ Options are 'comint (the default) or 'vterm. When set to 'vterm, aidermacs will
 launch a fully functional vterm buffer (with bracketed paste support) instead
 of using a comint process."
   :type '(choice (const :tag "Comint" comint)
-                 (const :tag "VTerm" vterm))
+          (const :tag "VTerm" vterm))
   :group 'aidermacs-backends)
 
 ;; Core output management functionality
@@ -92,12 +92,12 @@ and BUFFER-NAME is the name for the aidermacs buffer."
    (t
     (aidermacs-run-comint program args buffer-name))))
 
-(defun aidermacs--send-command-backend (buffer command)
+(defun aidermacs--send-command-backend (buffer command submit)
   "Send COMMAND to BUFFER using the appropriate backend."
   (setq aidermacs--last-command command
         aidermacs--current-output nil)
   (if (eq aidermacs-backend 'vterm)
-      (aidermacs--send-command-vterm buffer command)
+      (aidermacs--send-command-vterm buffer command submit)
     (aidermacs--send-command-comint buffer command)))
 
 (defun aidermacs--send-command-redirect-backend (buffer command &optional callback)
