@@ -581,7 +581,11 @@ If point is in a function, use function name."
                             (format " function `%s`" on-function))
                           (when region-text
                             (format " on the following code block:\n```\n%s\n```\n" region-text))))
-         (prompt (concat command " " prompt-prefix context ": "))
+         (prompt (concat (when command 
+                          (concat command " "))
+                        prompt-prefix
+                        context
+                        ": "))
          (user-command (aidermacs-read-string prompt)))
     (concat prompt user-command)))
 
