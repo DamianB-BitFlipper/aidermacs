@@ -65,7 +65,7 @@
            ;; Others
            :desc "Session History" "H" #'aidermacs-show-output-history
            :desc "Copy Last Aidermacs Output" "L" #'aidermacs-get-last-output
-           :desc "Clear Model Selection Cache" "O" #'aidermacs-clear-model-cache
+           :desc "Clear Supported Models List" "O" #'aidermacs-clear-supported-models
            :desc "Clear Buffer" "l" #'aidermacs-clear
            :desc "Aider Help" "h" #'aidermacs-help
            ))))

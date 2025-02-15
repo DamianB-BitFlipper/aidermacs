@@ -164,14 +164,14 @@ This function can be customized or redefined by the user."
    ["Understanding"
     ("m" "Show Last Commit" aidermacs-magit-show-last-commit)
     ("Q" "Ask General Question" aidermacs-ask-question-general)
-    ("q" "Ask Question" aidermacs-ask-question)
+    ("q" "Ask Question with Context" aidermacs-ask-question)
     ("e" "Explain This Code" aidermacs-function-or-region-explain)
     ("p" "Explain This Symbol" aidermacs-explain-symbol-under-point)]
 
    ["Others"
     ("H" "Session History" aidermacs-show-output-history)
     ("L" "Copy Last Aidermacs Output" aidermacs-get-last-output)
-    ("O" "Clear Model Selection Cache" aidermacs-clear-model-cache)
+    ("O" "Clear Supported Models List" aidermacs-clear-supported-models)
     ("l" "Clear Buffer" aidermacs-clear)
     ("h" "Aider Help" aidermacs-help)]])
 

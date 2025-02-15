@@ -140,7 +140,7 @@ Returns a list of model names with appropriate prefixes based on the API provide
        (setq aidermacs--cached-models models)
        (aidermacs--select-model)))))
 
-(defun aidermacs-clear-model-cache ()
+(defun aidermacs-clear-supported-models ()
   "Clear the cached models, forcing a fresh fetch on next use."
   (interactive)
   (setq aidermacs--cached-models nil)
