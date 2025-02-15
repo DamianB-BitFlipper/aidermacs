@@ -55,6 +55,12 @@
             :desc "Debug Exception" "x" #'aidermacs-debug-exception
             :desc "Undo Change" "u" #'aidermacs-undo-last-change)
 
+           ;; Mode Commands
+           (:prefix ("M" . "Mode Commands")
+            :desc "Set Architect Mode" "a" #'aidermacs-set-architect-mode
+            :desc "Set Ask Mode" "?" #'aidermacs-set-ask-mode
+            :desc "Set Code Mode" "c" #'aidermacs-set-code-mode)
+
            ;; Understanding
            :desc "Show Last Commit" "m" #'aidermacs-magit-show-last-commit
            :desc "Ask General Question" "Q" #'aidermacs-ask-question-general
@@ -68,12 +74,7 @@
            :desc "Clear Supported Models List" "O" #'aidermacs-clear-supported-models
            :desc "Clear Buffer" "l" #'aidermacs-clear
            :desc "Aider Help" "h" #'aidermacs-help
-
-           ;; Mode Commands
-           (:prefix ("M" . "Mode Commands")
-            :desc "Set Architect Mode" "a" #'aidermacs-set-architect-mode
-            :desc "Set Ask Mode" "?" #'aidermacs-set-ask-mode
-            :desc "Set Code Mode" "c" #'aidermacs-set-code-mode)))))
+           ))))
 
 ;; Add the setup function to appropriate hooks
 (add-hook 'find-file-hook #'aidermacs-doom-setup-keys)

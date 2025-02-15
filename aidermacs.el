@@ -139,6 +139,13 @@ This function can be customized or redefined by the user."
    ("x" "Debug Exception" aidermacs-debug-exception)
    ("u" "Undo Auto Git Commit" aidermacs-undo-last-commit)])
 
+(transient-define-prefix aidermacs-transient-mode-commands ()
+  "Code modification commands."
+  ["Mode Actions"
+   ("a" "Set Architect Mode" aidermacs-set-architect-mode)
+   ("?" "Set Ask Mode" aidermacs-set-ask-mode)
+   ("c" "Set Code Mode" aidermacs-set-code-mode)])
+
 ;; Main transient menu
 (transient-define-prefix aidermacs-transient-menu ()
   "AI Pair Programming Interface"
@@ -147,7 +154,7 @@ This function can be customized or redefined by the user."
     ("a" "Start/Open Session" aidermacs-run)
     ("." "Start in Current Dir" aidermacs-run-in-current-dir)
     ("o" "Change Solo Model" aidermacs-change-model)
-    ("s" "Reset Session" aidermacs-reset)
+    ("R" "Reset Session" aidermacs-reset)
     ("x" "Exit Session" aidermacs-exit)]
 
    ["Quick Actions"
@@ -157,9 +164,10 @@ This function can be customized or redefined by the user."
     ("g" "Code Go Ahead" aidermacs-code-go-ahead)
     ("s" "Commit" aidermacs-commit)]
 
-   ["File & Code"
+   ["Tools"
     ("F" "File Commands" aidermacs-transient-file-commands)
-    ("C" "Code Commands" aidermacs-transient-code-commands)]
+    ("C" "Code Commands" aidermacs-transient-code-commands)
+    ("M" "Mode Commands" aidermacs-transient-mode-commands)]
 
    ["Understanding"
     ("m" "Show Last Commit" aidermacs-magit-show-last-commit)
