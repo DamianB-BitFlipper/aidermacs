@@ -156,7 +156,7 @@ This function can be customized or redefined by the user."
     ("o" "Change Solo Model" aidermacs-change-model)
     ("R" "Reset Session" aidermacs-reset)
     ("x" "Exit Session" aidermacs-exit)
-    ("RET" "Submit in Session" aidermacs-submit)]
+    ("C-m" "Submit in Session" aidermacs-submit)]
 
    ["Quick Actions"
     ("f" "Add Current File" aidermacs-add-current-file)
