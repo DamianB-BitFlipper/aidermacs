@@ -49,7 +49,7 @@ store the output via `aidermacs--store-output`, restore ORIG-FILTER, and return 
   "Advice for vterm output: capture output until the finish sequence appears.
 This sets a temporary process filter and installs a repeating timer
 to force vterm to update until the expected finish sequence is detected."
-  (if (and (bound-and-true-p aidermacs-minor-mode)
+  (if (and (string-match-p "^\\*aidermacs:" (buffer-name))
            (eq major-mode 'vterm-mode))
       (let* ((start-point (vterm--get-prompt-point))
              (proc (get-buffer-process (current-buffer)))
