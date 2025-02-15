@@ -294,6 +294,12 @@ If the current buffer is already the aidermacs buffer, do nothing."
      (t
       (message "Buffer '%s' does not exist." (aidermacs-buffer-name))))))
 
+;;;###autoload
+(defun aidermacs-commit ()
+  "Send the command \"/commit\" to the aidermacs buffer."
+  (interactive)
+  (aidermacs--send-command "/commit"))
+
 ;; Function to reset the aidermacs buffer
 ;;;###autoload
 (defun aidermacs-clear ()
