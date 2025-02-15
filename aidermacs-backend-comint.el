@@ -280,7 +280,10 @@ When SUBMIT is non-nil, append a newline to submit the command."
       (aidermacs--store-output (with-current-buffer output-buffer
                                  (buffer-string))))))
 
-HERE HERE HER
+(defun aidermacs--send-cancel-comint (buffer)
+  "Send Ctrl-C to the aidermacs comint BUFFER to cancel current operation."
+  (with-current-buffer buffer
+    (comint-interrupt-subjob)))
 
 (provide 'aidermacs-backend-comint)
 
