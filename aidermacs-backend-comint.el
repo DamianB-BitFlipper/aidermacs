@@ -246,7 +246,7 @@ This allows for multi-line input without sending the command."
           (use-local-map local-map))
         (font-lock-add-keywords nil aidermacs-font-lock-keywords t)))))
 
-(defun aidermacs--send-command-comint (buffer command)
+(defun aidermacs--send-command-comint (buffer command submit)
   "Send COMMAND to the aidermacs comint BUFFER."
   (with-current-buffer buffer
     (let ((process (get-buffer-process buffer))
