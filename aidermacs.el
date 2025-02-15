@@ -169,7 +169,6 @@ This function can be customized or redefined by the user."
     ("p" "Explain This Symbol" aidermacs-explain-symbol-under-point)]
 
    ["Others"
-    ("A" "Toggle Architect Mode (Separate Reasoner/Editor)" aidermacs-toggle-architect-mode)
     ("H" "Session History" aidermacs-show-output-history)
     ("L" "Copy Last Aidermacs Output" aidermacs-get-last-output)
     ("O" "Clear Model Selection Cache" aidermacs-clear-model-cache)
@@ -296,6 +295,25 @@ If the current buffer is already the aidermacs buffer, do nothing."
       (pop-to-buffer buffer))
      (t
       (message "Buffer '%s' does not exist." (aidermacs-buffer-name))))))
+
+;; Functions to set the various modes
+;;;###autoload
+(defun aidermacs-set-architect-mode ()
+  "Send the command \"/architect\" to the aidermacs buffer."
+  (interactive)
+  (aidermacs--send-command "/architect" t))
+
+;;;###autoload
+(defun aidermacs-set-ask-mode ()
+  "Send the command \"/ask\" to the aidermacs buffer."
+  (interactive)
+  (aidermacs--send-command "/ask" t))
+
+;;;###autoload
+(defun aidermacs-set-code-mode ()
+  "Send the command \"/code\" to the aidermacs buffer."
+  (interactive)
+  (aidermacs--send-command "/code" t))
 
 ;;;###autoload
 (defun aidermacs-commit ()
