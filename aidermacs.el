@@ -155,7 +155,8 @@ This function can be customized or redefined by the user."
     ("." "Start in Current Dir" aidermacs-run-in-current-dir)
     ("o" "Change Solo Model" aidermacs-change-model)
     ("R" "Reset Session" aidermacs-reset)
-    ("x" "Exit Session" aidermacs-exit)]
+    ("x" "Exit Session" aidermacs-exit)
+    ("RET" "Submit in Session" aidermacs-submit)]
 
    ["Quick Actions"
     ("f" "Add Current File" aidermacs-add-current-file)
@@ -348,6 +349,12 @@ If the current buffer is already the aidermacs buffer, do nothing."
   (interactive)
   (aidermacs--send-command "/exit" t))
 
+;;;###autoload
+(defun aidermacs-submit ()
+  "Trigger execution in the aidermacs buffer."
+  (interactive)
+  ;; The command is an empty string, but set submit to true to trigger aider execution
+  (aidermacs--send-command "" t))
 
 (defun aidermacs--process-message-if-multi-line (str)
   "Entering multi-line chat messages
