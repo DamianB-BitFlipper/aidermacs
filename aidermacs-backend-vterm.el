@@ -89,7 +89,6 @@ and BUFFER-NAME is the name of the vterm buffer."
            (vterm-shell cmd)
            (vterm-shell-orig vterm-shell))
       (with-current-buffer (vterm-other-window)
-        (aidermacs-minor-mode 1)
         (advice-add 'vterm-send-return :around #'aidermacs--vterm-output-advice))))
   buffer-name)
 
