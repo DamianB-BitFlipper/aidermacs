@@ -154,7 +154,7 @@ This function can be customized or redefined by the user."
     ("f" "Add Current File" aidermacs-add-current-file)
     ("c" "Code Change" aidermacs-code-change)
     ("r" "Refactor" aidermacs-function-or-region-refactor)
-    ("g" "Go Ahead" aidermacs-go-ahead)
+    ("g" "Code Go Ahead" aidermacs-code-go-ahead)
     ("s" "Commit" aidermacs-commit)]
 
    ["File & Code"
@@ -257,8 +257,9 @@ This is useful for working in monorepos where you want to limit aider's scope."
 
 (defun aidermacs--send-command (command submit &optional switch-to-buffer)
   "Send COMMAND to the corresponding aidermacs process.
-If SWITCH-TO-BUFFER is non-nil, switch to the aidermacs buffer.
-If SUBMIT is non-nil, submit the command to the backend."
+If SUBMIT is non-nil, submit the command to the backend. Otherwise,
+just add it to the context. If SWITCH-TO-BUFFER is non-nil, switch
+to the aidermacs buffer."
   (let* ((buffer-name (aidermacs-buffer-name))
          (buffer (or (get-buffer buffer-name)
                      (progn (aidermacs-run)
@@ -334,7 +335,7 @@ wrap it in {aidermacs\nstr\naidermacs}. Otherwise return STR unchanged."
 
 ;;;###autoload
 (defun aidermacs-act-on-current-file (command-prefix)
-  "Send the command \"COMMAND-PREFIX <current buffer file full path>\" to the corresponding aidermacs comint buffer."
+  "Send the command \"COMMAND-PREFIX <current buffer file full path>\" to the corresponding aidermacs buffer."
   ;; Ensure the current buffer is associated with a file
   (if (not buffer-file-name)
       (message "Current buffer is not associated with a file.")
@@ -349,20 +350,20 @@ wrap it in {aidermacs\nstr\naidermacs}. Otherwise return STR unchanged."
 
 ;;;###autoload
 (defun aidermacs-add-current-file ()
-  "Send the command \"/add <current buffer file full path>\" to the corresponding aidermacs comint buffer."
+  "Send the command \"/add <current buffer file full path>\" to the corresponding aidermacs buffer."
   (interactive)
   (aidermacs-act-on-current-file "/add"))
 
 ;;;###autoload
 (defun aidermacs-add-current-file-read-only ()
-  "Send the command \"/read-only <current buffer file full path>\" to the corresponding aidermacs comint buffer."
+  "Send the command \"/read-only <current buffer file full path>\" to the corresponding aidermacs buffer."
   (interactive)
   (aidermacs-act-on-current-file "/read-only"))
 
 
 ;;;###autoload
 (defun aidermacs-drop-current-file ()
-  "Send the command \"/drop <current buffer file full path>\" to the corresponding aider comint buffer."
+  "Send the command \"/drop <current buffer file full path>\" to the corresponding aider buffer."
   (interactive)
   (aidermacs-act-on-current-file "/drop"))
 
@@ -384,19 +385,19 @@ wrap it in {aidermacs\nstr\naidermacs}. Otherwise return STR unchanged."
 ;; Function to send a custom command to corresponding aidermacs buffer
 ;;;###autoload
 (defun aidermacs-general-command ()
-  "Prompt the user to input COMMAND and send it to the corresponding aidermacs comint buffer."
+  "Prompt the user to input COMMAND and send it to the corresponding aidermacs buffer."
   (interactive)
   (let ((command (aidermacs-read-string "Enter general aider command: ")))
     ;; Use the shared helper function to send the command
-    (aidermacs--send-command command t t)))
+    (aidermacs--send-command command t)))
 
 ;; New function to get command from user and send it prefixed with "/code "
 ;;;###autoload
 (defun aidermacs-code-change ()
-  "Prompt the user for a command and send it to the corresponding aidermacs comint buffer prefixed with \"/code \"."
+  "Prompt the user for a command and send it to the corresponding aidermacs buffer prefixed with \"/code \"."
   (interactive)
   (when-let ((command (aidermacs--form-prompt "/code" "Code change" t)))
-    (aidermacs--send-command command t t)))
+    (aidermacs--send-command command t)))
 
 (defun aidermacs--parse-ls-output (output)
   "Parse the /ls command OUTPUT to extract files in chat.
@@ -501,9 +502,10 @@ Sends the \"/ls\" command and returns the list of files via callback."
 
 ;;;###autoload
 (defun aidermacs-ask-question ()
-  "Prompt the user for a command and send it to the corresponding aidermacs comint buffer prefixed with \"/ask \".
-If a region is active, append the region text to the question.
-If cursor is inside a function, include the function name as context."
+  "Let the user ask a question to aider.
+Sends the input to the corresponding aidermacs buffer prefixed with \"/ask \".
+If a region is active, append the region text to the question. If cursor is inside
+a function, include the function name as context."
   (interactive)
   ;; Dispatch to general question if in aidermacs buffer
   (when (string= (buffer-name) (aidermacs-buffer-name))
@@ -511,43 +513,43 @@ If cursor is inside a function, include the function name as context."
     (cl-return-from aidermacs-ask-question))
   (aidermacs-add-current-file)
   (when-let ((command (aidermacs--form-prompt "/ask" "Ask")))
-    (aidermacs--send-command command t t)))
+    (aidermacs--send-command command t)))
 
 ;;;###autoload
 (defun aidermacs-ask-question-general ()
-  "Prompt the user for a general question and send it to the corresponding aidermacs comint buffer prefixed with \"/ask \"."
+  "Prompt the user for a general question and send it to the corresponding aidermacs buffer prefixed with \"/ask \"."
   (interactive)
   (when-let ((command (aidermacs--form-prompt "/ask" "Ask general question" t)))
-    (aidermacs--send-command command t t)))
+    (aidermacs--send-command command t)))
 
 ;;;###autoload
 (defun aidermacs-help ()
-  "Prompt the user for a command and send it to the corresponding aidermacs comint buffer prefixed with \"/help \"."
+  "Prompt the user for a command and send it to the corresponding aidermacs buffer prefixed with \"/help \"."
   (interactive)
   (when-let ((command (aidermacs--form-prompt "/help" nil t)))
-    (aidermacs--send-command command t t)))
+    (aidermacs--send-command command t)))
 
 ;;;###autoload
-(defun aidermacs-architect-discussion ()
-  "Prompt the user for a command and send it to the corresponding aidermacs comint buffer prefixed with \"/architect \"."
+(defun aidermacs-architect-code ()
+  "Prompt the user for a command and send it to the corresponding aidermacs buffer prefixed with \"/architect \"."
   (interactive)
-  (when-let ((command (aidermacs--form-prompt "/architect" "Architect Discussion")))
-    (aidermacs--send-command command t t)))
+  (when-let ((command (aidermacs--form-prompt "/architect" "Architect Code")))
+    (aidermacs--send-command command t)))
 
 ;;;###autoload
 (defun aidermacs-debug-exception ()
-  "Prompt the user for a command and send it to the corresponding aidermacs comint buffer prefixed with \"/debug \",
+  "Prompt the user for a command and send it to the corresponding aidermacs buffer prefixed with \"/debug \",
 replacing all newline characters except for the one at the end."
   (interactive)
   (when-let ((user-command (aidermacs--form-prompt "/ask" "Enter exception, can be multiple lines")))
     (let ((command (concat "/ask Investigate the following exception, with current added files as context: " user-command)))
-      (aidermacs--send-command command t t))))
+      (aidermacs--send-command command t))))
 
 ;;;###autoload
-(defun aidermacs-go-ahead ()
-  "Send the command \"go ahead\" to the corresponding aidermacs comint buffer."
+(defun aidermacs-code-go-ahead ()
+  "Send the command \"go ahead\" to the corresponding aidermacs buffer."
   (interactive)
-  (aidermacs--send-command "go ahead" t t))
+  (aidermacs--send-command "/code go ahead" t))
 
 ;;;###autoload
 (defun aidermacs-magit-show-last-commit ()
