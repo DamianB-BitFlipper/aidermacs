@@ -100,6 +100,8 @@ When SUBMIT is non-nil, send a return after the command."
     (when submit
       (vterm-send-return))))
 
+HEREHHERE HER
+
 (provide 'aidermacs-backend-vterm)
 
 ;;; aidermacs-backend-vterm.el ends here
