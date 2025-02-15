@@ -414,12 +414,13 @@ wrap it in {aidermacs\nstr\naidermacs}. Otherwise return STR unchanged."
 
 ;; Function to send a custom command to corresponding aidermacs buffer
 ;;;###autoload
-(defun aidermacs-general-command ()
-  "Prompt the user to input COMMAND and send it to the corresponding aidermacs buffer."
+(defun aidermacs-send-text ()
+  "Send arbitrary text to the aidermacs buffer.
+Prompts for user input and sends the entered text directly to aider."
   (interactive)
-  (let ((command (aidermacs-read-string "Enter general aider command: ")))
+  (let ((text (aidermacs-read-string "Enter text to send: ")))
     ;; Use the shared helper function to send the command
-    (aidermacs--send-command command t)))
+    (aidermacs--send-command text t)))
 
 ;; New function to get command from user and send it prefixed with "/code "
 ;;;###autoload
