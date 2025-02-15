@@ -627,16 +627,21 @@ If point is in a function, explain that function."
 Multiple files can be selected by hitting enter on each file.
 Use C-g to finish selection."
   (interactive)
-  (let ((last-input nil)
-        (continue t))
+  (let ((continue t)
+        (current-dir nil))
     (while continue
       (condition-case nil
-          (let* ((file (read-file-name "Select file to add: " nil nil t nil
+          (let* ((init-input (when current-dir 
+                              (file-name-as-directory current-dir)))
+                 (file (read-file-name "Select file to add: " 
+                                      nil nil t init-input
                                       (lambda (f)
                                         (or (file-directory-p f)
                                             (file-exists-p f)))))
                  (expanded-file (expand-file-name file)))
-            (setq last-input (minibuffer-contents))
+            ;; Store the directory path for next iteration
+            (setq current-dir (or (file-name-directory (minibuffer-contents))
+                                 (file-name-directory expanded-file)))
             (when (file-exists-p expanded-file)
               (aidermacs--send-command (concat "/add " expanded-file) t)))
         (quit
