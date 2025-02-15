@@ -624,12 +624,15 @@ If point is in a function, explain that function."
 ;;;###autoload
 (defun aidermacs-add-files-interactively ()
   "Add files to aidermacs by interactively selecting them using `find-file`.
-Multiple files can be selected by calling the command multiple times."
+Keep selecting files until C-g is pressed."
   (interactive)
-  (when-let ((file (expand-file-name (read-file-name "Select file to add: "))))
-    (if (file-exists-p file)
-        (aidermacs--send-command (concat "/add " file) t)
-      (message "File does not exist: %s" file))))
+  (while t
+    (condition-case nil
+        (when-let ((file (expand-file-name (read-file-name "Select file to add (C-g to finish): "))))
+          (if (file-exists-p file)
+              (aidermacs--send-command (concat "/add " file) t)
+            (message "File does not exist: %s" file)))
+      (quit (keyboard-quit)))))
 
 ;;;###autoload
 (defun aidermacs-add-same-type-files-under-dir ()
