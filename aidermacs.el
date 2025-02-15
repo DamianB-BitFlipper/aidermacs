@@ -582,10 +582,10 @@ If point is in a function, use function name."
                           (when region-text
                             (format " on the following code block:\n```\n%s\n```\n" region-text))))
          (prompt (concat (when command 
-                          (concat command " "))
-                        prompt-prefix
-                        context
-                        ": "))
+                           (concat command " "))
+                         prompt-prefix
+                         context
+                         ": "))
          (user-command (aidermacs-read-string prompt)))
     (concat prompt user-command)))
 
@@ -606,7 +606,7 @@ If point is in a function, explain that function."
   (interactive)
   (aidermacs-add-current-file)
   (when-let ((command (aidermacs--form-prompt "/ask" "Explain")))
-    (aidermacs--send-command command t t)))
+    (aidermacs--send-command command t)))
 
 ;;;###autoload
 (defun aidermacs-explain-symbol-under-point ()
@@ -619,12 +619,7 @@ If point is in a function, explain that function."
                 (line-end-position)))
          (prompt (format "/ask Please explain what '%s' means in the context of this code line: %s"
                          symbol line)))
-    (aidermacs--send-command prompt t t)))
-
-(defun aidermacs-send-command-with-prefix (prefix command)
-  "Send COMMAND to the aidermacs buffer prefixed with PREFIX."
-  (aidermacs-add-current-file)
-  (aidermacs--send-command (concat prefix command) t t))
+    (aidermacs--send-command prompt t)))
 
 ;;;###autoload
 (defun aidermacs-batch-add-dired-marked-files ()
@@ -666,7 +661,7 @@ If there are more than 40 files, refuse to add and show warning message."
           (message "Too many files (%d, > %d) found with suffix .%s. Aborting."
                    (length files) max-files current-suffix)
         (let ((command (concat "/add " (mapconcat 'identity files " "))))
-          (aidermacs--send-command command t t))
+          (aidermacs--send-command command t))
         (message "Added %d files with suffix .%s"
                  (length files) current-suffix)))))
 
@@ -765,7 +760,7 @@ Otherwise, send the line under cursor."
                   (buffer-substring-no-properties (region-beginning) (region-end))
                 (string-trim (thing-at-point 'line t)))))
     (when text
-      (aidermacs--send-command text t t))))
+      (aidermacs--send-command text))))
 
 ;;;###autoload
 (defun aidermacs-send-region-by-line ()
@@ -778,7 +773,7 @@ and send each non-empty line to aidermacs session."
         (mapc (lambda (line)
                 (let ((trimmed (string-trim line)))
                   (when (not (string-empty-p trimmed))
-                    (aidermacs--send-command trimmed t t))))
+                    (aidermacs--send-command trimmed t))))
               lines))
     (message "No region selected.")))
 
