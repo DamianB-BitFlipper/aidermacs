@@ -460,7 +460,7 @@ Sends the \"/ls\" command and returns the list of files via callback."
      (if-let* ((files (aidermacs--parse-ls-output output))
                (file (completing-read "Select file to drop: " files nil t))
                (clean-file (replace-regexp-in-string " (read-only)$" "" file)))
-         (aidermacs--send-command (format "/drop ./%s" clean-file)))
+         (aidermacs--send-command (format "/drop ./%s" clean-file) t))
      (message "No files available to drop"))))
 
 
@@ -760,7 +760,7 @@ Otherwise, send the line under cursor."
                   (buffer-substring-no-properties (region-beginning) (region-end))
                 (string-trim (thing-at-point 'line t)))))
     (when text
-      (aidermacs--send-command text))))
+      (aidermacs--send-command text nil))))
 
 ;;;###autoload
 (defun aidermacs-send-region-by-line ()
@@ -790,7 +790,7 @@ When sending paragraph content, preserve cursor position."
                       (buffer-substring-no-properties (region-beginning) (region-end))
                     (deactivate-mark))))))
     (when text
-      (aidermacs--send-command text t t))))
+      (aidermacs--send-command text nil))))
 
 ;;;###autoload
 (defun aidermacs-open-prompt-file ()
