@@ -72,7 +72,7 @@ When nil, disable auto-commits requiring manual git commits."
                                          ("cpp" . "c++"))
   "Map external language names to Emacs names."
   :type '(alist :key-type (string :tag "Language Name/Alias")
-                :value-type (string :tag "Mode Name (without -mode)"))
+          :value-type (string :tag "Mode Name (without -mode)"))
   :group 'aidermacs)
 
 (defcustom aidermacs-prompt-file-name ".aider.prompt.org"
@@ -624,28 +624,12 @@ If point is in a function, explain that function."
 ;;;###autoload
 (defun aidermacs-add-files-interactively ()
   "Add files to aidermacs by interactively selecting them using `find-file`.
-Multiple files can be selected by hitting enter on each file.
-Use C-g to finish selection."
+Multiple files can be selected by calling the command multiple times."
   (interactive)
-  (let ((continue t)
-        (current-dir nil))
-    (while continue
-      (condition-case nil
-          (let* ((init-input (when current-dir 
-                              (file-name-as-directory current-dir)))
-                 (file (read-file-name "Select file to add: " 
-                                      nil nil t init-input
-                                      (lambda (f)
-                                        (or (file-directory-p f)
-                                            (file-exists-p f)))))
-                 (expanded-file (expand-file-name file)))
-            ;; Store the directory path for next iteration
-            (setq current-dir (or (file-name-directory (minibuffer-contents))
-                                 (file-name-directory expanded-file)))
-            (when (file-exists-p expanded-file)
-              (aidermacs--send-command (concat "/add " expanded-file) t)))
-        (quit
-         (setq continue nil))))))
+  (when-let ((file (expand-file-name (read-file-name "Select file to add: "))))
+    (if (file-exists-p file)
+        (aidermacs--send-command (concat "/add " file) t)
+      (message "File does not exist: %s" file))))
 
 ;;;###autoload
 (defun aidermacs-add-same-type-files-under-dir ()
