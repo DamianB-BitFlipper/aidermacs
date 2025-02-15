@@ -154,7 +154,8 @@ This function can be customized or redefined by the user."
     ("f" "Add Current File" aidermacs-add-current-file)
     ("c" "Code Change" aidermacs-code-change)
     ("r" "Refactor" aidermacs-function-or-region-refactor)
-    ("g" "Go Ahead" aidermacs-go-ahead)]
+    ("g" "Go Ahead" aidermacs-go-ahead)
+    ("s" "Commit" aidermacs-commit)]
 
    ["File & Code"
     ("F" "File Commands" aidermacs-transient-file-commands)
