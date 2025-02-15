@@ -152,26 +152,21 @@ This function can be customized or redefined by the user."
   ["Aidermacs: AI Pair Programming"
    ["Core Actions"
     ("a" "Start/Open Session" aidermacs-run)
-    ("." "Start in Current Dir" aidermacs-run-in-current-dir)
+    ("-" "Start in Current Dir" aidermacs-run-in-current-dir)
     ("o" "Change Solo Model" aidermacs-change-model)
     ("R" "Reset Session" aidermacs-reset)
-    ("x" "Exit Session" aidermacs-exit)
-    ("C-m" "Submit in Session" aidermacs-submit)]
-
-   ["Quick Actions"
-    ("f" "Add Current File" aidermacs-add-current-file)
-    ("c" "Code Change" aidermacs-code-change)
-    ("r" "Refactor" aidermacs-function-or-region-refactor)
+    ("X" "Exit Session" aidermacs-exit)
+    ("<return>" "Submit in Session" aidermacs-submit)
     ("g" "Code Go Ahead" aidermacs-code-go-ahead)
     ("s" "Commit" aidermacs-commit)]
 
    ["Tools"
-    ("F" "File Commands" aidermacs-transient-file-commands)
-    ("C" "Code Commands" aidermacs-transient-code-commands)
-    ("M" "Mode Commands" aidermacs-transient-mode-commands)]
+    ("f" "File Commands" aidermacs-transient-file-commands)
+    ("c" "Code Commands" aidermacs-transient-code-commands)
+    ("m" "Mode Commands" aidermacs-transient-mode-commands)]
 
    ["Understanding"
-    ("m" "Show Last Commit" aidermacs-magit-show-last-commit)
+    ("d" "Show Diff" aidermacs-diff-maybe-magit)
     ("Q" "Ask General Question" aidermacs-ask-question-general)
     ("q" "Ask Question with Context" aidermacs-ask-question)
     ("e" "Explain This Code" aidermacs-function-or-region-explain)
@@ -564,14 +559,14 @@ a function, include the function name as context."
 
 ;;;###autoload
 (defun aidermacs-architect-code ()
-  "Prompt the user for a command and send it to the corresponding aidermacs buffer prefixed with \"/architect \"."
+  "Prompt the user for a command and send it to the corresponding aidermacs buffer prefixed with \"/architect\"."
   (interactive)
   (when-let ((command (aidermacs--form-prompt "/architect" "Architect Code")))
     (aidermacs--send-command command t)))
 
 ;;;###autoload
 (defun aidermacs-debug-exception ()
-  "Prompt the user for a command and send it to the corresponding aidermacs buffer prefixed with \"/debug \",
+  "Prompt the user for a command and send it to the corresponding aidermacs buffer prefixed with \"/debug\",
 replacing all newline characters except for the one at the end."
   (interactive)
   (when-let ((user-command (aidermacs--form-prompt "/ask" "Enter exception, can be multiple lines")))
@@ -585,13 +580,13 @@ replacing all newline characters except for the one at the end."
   (aidermacs--send-command "/code go ahead" t))
 
 ;;;###autoload
-(defun aidermacs-magit-show-last-commit ()
-  "Show the last commit message using Magit.
-If Magit is not installed, report that it is required."
+(defun aidermacs-diff-maybe-magit ()
+  "Show the last commit's diff using Magit.
+If Magit is not installed, use aiders \"/diff\" command."
   (interactive)
   (if (require 'magit nil 'noerror)
       (magit-show-commit "HEAD")
-    (message "Magit is required to show the last commit.")))
+    (aidermacs--send-command "/diff" t)))
 
 ;;;###autoload
 (defun aidermacs-undo-last-commit ()
@@ -796,21 +791,6 @@ Otherwise, send the line under cursor."
       (aidermacs--send-command text nil))))
 
 ;;;###autoload
-(defun aidermacs-send-region-by-line ()
-  "Get the text of the current selected region, split into lines,
-and send each non-empty line to aidermacs session."
-  (interactive)
-  (if (use-region-p)
-      (let* ((text (buffer-substring-no-properties (region-beginning) (region-end)))
-             (lines (split-string text "\n" t)))
-        (mapc (lambda (line)
-                (let ((trimmed (string-trim line)))
-                  (when (not (string-empty-p trimmed))
-                    (aidermacs--send-command trimmed t))))
-              lines))
-    (message "No region selected.")))
-
-;;;###autoload
 (defun aidermacs-send-block-or-region ()
   "Send the current active region text or current paragraph content.
 When sending paragraph content, preserve cursor position."
@@ -824,6 +804,21 @@ When sending paragraph content, preserve cursor position."
                     (deactivate-mark))))))
     (when text
       (aidermacs--send-command text nil))))
+
+;;;###autoload
+(defun aidermacs-send-region-line-by-line ()
+  "Get the text of the current selected region, split into lines,
+and send each non-empty line to aidermacs session."
+  (interactive)
+  (if (use-region-p)
+      (let* ((text (buffer-substring-no-properties (region-beginning) (region-end)))
+             (lines (split-string text "\n" t)))
+        (mapc (lambda (line)
+                (let ((trimmed (string-trim line)))
+                  (when (not (string-empty-p trimmed))
+                    (aidermacs--send-command trimmed t))))
+              lines))
+    (message "No region selected.")))
 
 ;;;###autoload
 (defun aidermacs-open-prompt-file ()

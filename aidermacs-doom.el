@@ -21,21 +21,18 @@
     (map! :leader
           (:prefix ("A" . "aidermacs")
            ;; Core Actions
-           :desc "Start/Open Session" "." #'aidermacs-run-in-current-dir
+           :desc "Start/Open Session" "a" #'aidermacs-run
+           :desc "Start in Current Dir" "-" #'aidermacs-run-in-current-dir
            :desc "Change Model" "o" #'aidermacs-change-model
            :desc "Reset Session" "R" #'aidermacs-reset
-           :desc "Exit Session" "x" #'aidermacs-exit
+           :desc "Exit Session" "X" #'aidermacs-exit
            :desc "Submit in Session" "RET" #'aidermacs-submit
-
-           ;; Quick Actions
-           :desc "Add Current File" "f" #'aidermacs-add-current-file
-           :desc "Code Change" "c" #'aidermacs-code-change
-           :desc "Refactor" "r" #'aidermacs-function-or-region-refactor
            :desc "Code Go Ahead" "g" #'aidermacs-code-go-ahead
+           :desc "Commit" "s" #'aidermacs-commit
            :desc "Undo Change" "u" #'aidermacs-undo-last-change
 
            ;; File Commands
-           (:prefix ("F" . "File Commands")
+           (:prefix ("f" . "File Commands")
             :desc "Add Current File" "f" #'aidermacs-add-current-file
             :desc "Add File Interactively" "i" #'aidermacs-add-files-interactively
             :desc "Add Current Read-Only" "r" #'aidermacs-add-current-file-read-only
@@ -47,7 +44,7 @@
             :desc "List Files" "l" #'aidermacs-list-added-files)
 
            ;; Code Commands
-           (:prefix ("C" . "Code Commands")
+           (:prefix ("c" . "Code Commands")
             :desc "Code Change" "c" #'aidermacs-code-change
             :desc "Refactor Code" "r" #'aidermacs-function-or-region-refactor
             :desc "Implement TODO" "i" #'aidermacs-implement-todo
@@ -57,13 +54,13 @@
             :desc "Undo Change" "u" #'aidermacs-undo-last-change)
 
            ;; Mode Commands
-           (:prefix ("M" . "Mode Commands")
+           (:prefix ("m" . "Mode Commands")
             :desc "Set Architect Mode" "a" #'aidermacs-set-architect-mode
             :desc "Set Ask Mode" "?" #'aidermacs-set-ask-mode
             :desc "Set Code Mode" "c" #'aidermacs-set-code-mode)
 
            ;; Understanding
-           :desc "Show Last Commit" "m" #'aidermacs-magit-show-last-commit
+           :desc "Show Diff" "d" #'aidermacs-diff-maybe-magit
            :desc "Ask General Question" "Q" #'aidermacs-ask-question-general
            :desc "Ask Question" "q" #'aidermacs-ask-question
            :desc "Explain This Code" "e" #'aidermacs-function-or-region-explain

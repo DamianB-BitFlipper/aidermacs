@@ -98,7 +98,7 @@ and BUFFER-NAME is the name for the aidermacs buffer."
         aidermacs--current-output nil)
   (if (eq aidermacs-backend 'vterm)
       (aidermacs--send-command-vterm buffer command submit)
-    (aidermacs--send-command-comint buffer command)))
+    (aidermacs--send-command-comint buffer command submit)))
 
 (defun aidermacs--send-command-redirect-backend (buffer command &optional callback)
   "Send COMMAND to BUFFER using the appropriate backend.
