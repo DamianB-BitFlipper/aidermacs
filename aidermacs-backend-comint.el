@@ -260,8 +260,8 @@ When SUBMIT is non-nil, append a newline to submit the command."
                           'rear-nonsticky t))
       (set-marker (process-mark process) (point))
       (comint-send-string process (if submit
-                                     (concat command "\n")
-                                   command)))))
+                                      (concat command "\n")
+                                    command)))))
 
 (defun aidermacs--send-command-redirect-comint (buffer command)
   "Send COMMAND to the aidermacs comint BUFFER and collect result into OUTPUT-BUFFER."
@@ -279,6 +279,8 @@ When SUBMIT is non-nil, append a newline to submit the command."
           (comint-redirect-cleanup)))
       (aidermacs--store-output (with-current-buffer output-buffer
                                  (buffer-string))))))
+
+HERE HERE HER
 
 (provide 'aidermacs-backend-comint)
 
