@@ -23,7 +23,7 @@
            ;; Core Actions
            :desc "Start/Open Session" "." #'aidermacs-run-in-current-dir
            :desc "Change Model" "o" #'aidermacs-change-model
-           :desc "Reset Session" "s" #'aidermacs-reset
+           :desc "Reset Session" "R" #'aidermacs-reset
            :desc "Exit Session" "x" #'aidermacs-exit
 
            ;; Quick Actions
@@ -68,6 +68,9 @@
            :desc "Clear Supported Models List" "O" #'aidermacs-clear-supported-models
            :desc "Clear Buffer" "l" #'aidermacs-clear
            :desc "Aider Help" "h" #'aidermacs-help
+
+           ;; Mode Commands
+
            ))))
 
 ;; Add the setup function to appropriate hooks
