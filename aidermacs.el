@@ -72,7 +72,7 @@ When nil, disable auto-commits requiring manual git commits."
                                          ("cpp" . "c++"))
   "Map external language names to Emacs names."
   :type '(alist :key-type (string :tag "Language Name/Alias")
-                :value-type (string :tag "Mode Name (without -mode)"))
+          :value-type (string :tag "Mode Name (without -mode)"))
   :group 'aidermacs)
 
 (defcustom aidermacs-prompt-file-name ".aider.prompt.org"
@@ -154,7 +154,8 @@ This function can be customized or redefined by the user."
     ("f" "Add Current File" aidermacs-add-current-file)
     ("c" "Code Change" aidermacs-code-change)
     ("r" "Refactor" aidermacs-function-or-region-refactor)
-    ("g" "Go Ahead" aidermacs-go-ahead)]
+    ("g" "Go Ahead" aidermacs-go-ahead)
+    ("s" "Commit" aidermacs-commit)]
 
    ["File & Code"
     ("F" "File Commands" aidermacs-transient-file-commands)
@@ -293,6 +294,12 @@ If the current buffer is already the aidermacs buffer, do nothing."
       (pop-to-buffer buffer))
      (t
       (message "Buffer '%s' does not exist." (aidermacs-buffer-name))))))
+
+;;;###autoload
+(defun aidermacs-commit ()
+  "Send the command \"/commit\" to the aidermacs buffer."
+  (interactive)
+  (aidermacs--send-command "/commit"))
 
 ;; Function to reset the aidermacs buffer
 ;;;###autoload
@@ -624,12 +631,15 @@ If point is in a function, explain that function."
 ;;;###autoload
 (defun aidermacs-add-files-interactively ()
   "Add files to aidermacs by interactively selecting them using `find-file`.
-Multiple files can be selected by calling the command multiple times."
+Keep selecting files until C-g is pressed."
   (interactive)
-  (when-let ((file (expand-file-name (read-file-name "Select file to add: "))))
-    (if (file-exists-p file)
-        (aidermacs--send-command (concat "/add " file) t)
-      (message "File does not exist: %s" file))))
+  (while t
+    (condition-case nil
+        (when-let ((file (expand-file-name (read-file-name "Select file to add (C-g to finish): "))))
+          (if (file-exists-p file)
+              (aidermacs--send-command (concat "/add " file))
+            (message "File does not exist: %s" file)))
+      (quit (keyboard-quit)))))
 
 ;;;###autoload
 (defun aidermacs-add-same-type-files-under-dir ()
