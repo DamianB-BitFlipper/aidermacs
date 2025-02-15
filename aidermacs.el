@@ -255,15 +255,16 @@ This is useful for working in monorepos where you want to limit aider's scope."
         (default-directory (file-truename default-directory)))
     (aidermacs-run)))
 
-(defun aidermacs--send-command (command &optional switch-to-buffer)
+(defun aidermacs--send-command (command submit &optional switch-to-buffer)
   "Send COMMAND to the corresponding aidermacs process.
-If SWITCH-TO-BUFFER is non-nil, switch to the aidermacs buffer."
+If SWITCH-TO-BUFFER is non-nil, switch to the aidermacs buffer.
+If SUBMIT is non-nil, submit the command to the backend."
   (let* ((buffer-name (aidermacs-buffer-name))
          (buffer (or (get-buffer buffer-name)
                      (progn (aidermacs-run)
                             (get-buffer buffer-name))))
          (processed-command (aidermacs--process-message-if-multi-line command)))
-    (aidermacs--send-command-backend buffer processed-command)
+    (aidermacs--send-command-backend buffer processed-command submit)
     (when (and switch-to-buffer (not (string= (buffer-name) buffer-name)))
       (aidermacs-switch-to-buffer))))
 
@@ -299,26 +300,26 @@ If the current buffer is already the aidermacs buffer, do nothing."
 (defun aidermacs-commit ()
   "Send the command \"/commit\" to the aidermacs buffer."
   (interactive)
-  (aidermacs--send-command "/commit"))
+  (aidermacs--send-command "/commit" t))
 
 ;; Function to reset the aidermacs buffer
 ;;;###autoload
 (defun aidermacs-clear ()
   "Send the command \"/clear\" to the aidermacs buffer."
   (interactive)
-  (aidermacs--send-command "/clear"))
+  (aidermacs--send-command "/clear" t))
 
 ;;;###autoload
 (defun aidermacs-reset ()
   "Send the command \"/reset\" to the aidermacs buffer."
   (interactive)
-  (aidermacs--send-command "/reset"))
+  (aidermacs--send-command "/reset" t))
 
 ;;;###autoload
 (defun aidermacs-exit ()
   "Send the command \"/exit\" to the aidermacs buffer."
   (interactive)
-  (aidermacs--send-command "/exit"))
+  (aidermacs--send-command "/exit" t))
 
 
 (defun aidermacs--process-message-if-multi-line (str)
@@ -344,7 +345,7 @@ wrap it in {aidermacs\nstr\naidermacs}. Otherwise return STR unchanged."
                              file-path))
            (command (format "%s %s" command-prefix formatted-path)))
       ;; Use the shared helper function to send the command
-      (aidermacs--send-command command))))
+      (aidermacs--send-command command t))))
 
 ;;;###autoload
 (defun aidermacs-add-current-file ()
@@ -377,7 +378,7 @@ wrap it in {aidermacs\nstr\naidermacs}. Otherwise return STR unchanged."
     (setq files (delq nil files))
     (if files
         (let ((command (concat "/add " (mapconcat 'identity files " "))))
-          (aidermacs--send-command command nil))
+          (aidermacs--send-command command t))
       (message "No files found in the current window."))))
 
 ;; Function to send a custom command to corresponding aidermacs buffer
@@ -387,7 +388,7 @@ wrap it in {aidermacs\nstr\naidermacs}. Otherwise return STR unchanged."
   (interactive)
   (let ((command (aidermacs-read-string "Enter general aider command: ")))
     ;; Use the shared helper function to send the command
-    (aidermacs--send-command command t)))
+    (aidermacs--send-command command t t)))
 
 ;; New function to get command from user and send it prefixed with "/code "
 ;;;###autoload
@@ -395,7 +396,7 @@ wrap it in {aidermacs\nstr\naidermacs}. Otherwise return STR unchanged."
   "Prompt the user for a command and send it to the corresponding aidermacs comint buffer prefixed with \"/code \"."
   (interactive)
   (when-let ((command (aidermacs--form-prompt "/code" "Code change" t)))
-    (aidermacs--send-command command t)))
+    (aidermacs--send-command command t t)))
 
 (defun aidermacs--parse-ls-output (output)
   "Parse the /ls command OUTPUT to extract files in chat.
@@ -466,7 +467,7 @@ Sends the \"/ls\" command and returns the list of files via callback."
 (defun aidermacs-drop-all-files ()
   "Drop all files from the current chat session."
   (interactive)
-  (aidermacs--send-command "/drop"))
+  (aidermacs--send-command "/drop" t))
 
 
 ;;;###autoload
@@ -510,28 +511,28 @@ If cursor is inside a function, include the function name as context."
     (cl-return-from aidermacs-ask-question))
   (aidermacs-add-current-file)
   (when-let ((command (aidermacs--form-prompt "/ask" "Ask")))
-    (aidermacs--send-command command t)))
+    (aidermacs--send-command command t t)))
 
 ;;;###autoload
 (defun aidermacs-ask-question-general ()
   "Prompt the user for a general question and send it to the corresponding aidermacs comint buffer prefixed with \"/ask \"."
   (interactive)
   (when-let ((command (aidermacs--form-prompt "/ask" "Ask general question" t)))
-    (aidermacs--send-command command t)))
+    (aidermacs--send-command command t t)))
 
 ;;;###autoload
 (defun aidermacs-help ()
   "Prompt the user for a command and send it to the corresponding aidermacs comint buffer prefixed with \"/help \"."
   (interactive)
   (when-let ((command (aidermacs--form-prompt "/help" nil t)))
-    (aidermacs--send-command command t)))
+    (aidermacs--send-command command t t)))
 
 ;;;###autoload
 (defun aidermacs-architect-discussion ()
   "Prompt the user for a command and send it to the corresponding aidermacs comint buffer prefixed with \"/architect \"."
   (interactive)
   (when-let ((command (aidermacs--form-prompt "/architect" "Architect Discussion")))
-    (aidermacs--send-command command t)))
+    (aidermacs--send-command command t t)))
 
 ;;;###autoload
 (defun aidermacs-debug-exception ()
@@ -540,13 +541,13 @@ replacing all newline characters except for the one at the end."
   (interactive)
   (when-let ((user-command (aidermacs--form-prompt "/ask" "Enter exception, can be multiple lines")))
     (let ((command (concat "/ask Investigate the following exception, with current added files as context: " user-command)))
-      (aidermacs--send-command command t))))
+      (aidermacs--send-command command t t))))
 
 ;;;###autoload
 (defun aidermacs-go-ahead ()
   "Send the command \"go ahead\" to the corresponding aidermacs comint buffer."
   (interactive)
-  (aidermacs--send-command "go ahead" t))
+  (aidermacs--send-command "go ahead" t t))
 
 ;;;###autoload
 (defun aidermacs-magit-show-last-commit ()
@@ -561,7 +562,7 @@ If Magit is not installed, report that it is required."
 (defun aidermacs-undo-last-commit ()
   "Undo the last change made by aidermacs."
   (interactive)
-  (aidermacs--send-command "/undo"))
+  (aidermacs--send-command "/undo" t))
 
 
 ;;;###autoload
@@ -598,7 +599,7 @@ If point is in a function, explain that function."
   (interactive)
   (aidermacs-add-current-file)
   (when-let ((command (aidermacs--form-prompt "/ask" "Explain")))
-    (aidermacs--send-command command t)))
+    (aidermacs--send-command command t t)))
 
 ;;;###autoload
 (defun aidermacs-explain-symbol-under-point ()
@@ -611,12 +612,12 @@ If point is in a function, explain that function."
                 (line-end-position)))
          (prompt (format "/ask Please explain what '%s' means in the context of this code line: %s"
                          symbol line)))
-    (aidermacs--send-command prompt t)))
+    (aidermacs--send-command prompt t t)))
 
 (defun aidermacs-send-command-with-prefix (prefix command)
   "Send COMMAND to the aidermacs buffer prefixed with PREFIX."
   (aidermacs-add-current-file)
-  (aidermacs--send-command (concat prefix command) t))
+  (aidermacs--send-command (concat prefix command) t t))
 
 ;;;###autoload
 (defun aidermacs-batch-add-dired-marked-files ()
@@ -637,7 +638,7 @@ Keep selecting files until C-g is pressed."
     (condition-case nil
         (when-let ((file (expand-file-name (read-file-name "Select file to add (C-g to finish): "))))
           (if (file-exists-p file)
-              (aidermacs--send-command (concat "/add " file))
+              (aidermacs--send-command (concat "/add " file) t)
             (message "File does not exist: %s" file)))
       (quit (keyboard-quit)))))
 
@@ -658,7 +659,7 @@ If there are more than 40 files, refuse to add and show warning message."
           (message "Too many files (%d, > %d) found with suffix .%s. Aborting."
                    (length files) max-files current-suffix)
         (let ((command (concat "/add " (mapconcat 'identity files " "))))
-          (aidermacs--send-command command t))
+          (aidermacs--send-command command t t))
         (message "Added %d files with suffix .%s"
                  (length files) current-suffix)))))
 
@@ -687,7 +688,7 @@ Otherwise:
                         (format "Please implement test function '%s'. Follow standard unit testing practices and make it a meaningful test. Do not use Mock if possible."
                                 function-name))
                        (command (aidermacs--form-prompt "/architect" initial-input)))
-                  (aidermacs--send-command command t))
+                  (aidermacs--send-command command t t))
               (message "Current function '%s' does not appear to be a test function." function-name))
           (message "Please place cursor inside a test function to implement.")))
        ;; Non-test file case
@@ -700,7 +701,7 @@ Otherwise:
                   (format "Please write unit test code for file '%s'. For each function %s"
                           (file-name-nondirectory buffer-file-name) common-instructions))))
           (command (aidermacs--form-prompt "/architect" initial-input)))
-        (aidermacs--send-command command t))))))
+        (aidermacs--send-command command t t))))))
 
 ;;;###autoload
 (defun aidermacs-fix-failing-test-under-cursor ()
@@ -712,7 +713,7 @@ This function assumes the cursor is on or inside a test function."
       (let* ((initial-input (format "The test '%s' is failing. Please analyze and fix the code to make the test pass. Don't break any other test"
                                     test-function-name))
              (command (aidermacs--form-prompt "/architect" initial-input)))
-        (aidermacs--send-command command t))
+        (aidermacs--send-command command t t))
     (message "No test function found at cursor position.")))
 
 (defun aidermacs--is-comment-line (line)
@@ -745,7 +746,7 @@ Otherwise implement TODOs for the entire current file."
                                    (when is-comment
                                      (format " on this comment: `%s`." current-line))
                                    " Keep existing code structure"))))
-        (aidermacs--send-command command t)))))
+        (aidermacs--send-command command t t)))))
 
 ;;;###autoload
 (defun aidermacs-send-line-or-region ()
@@ -757,7 +758,7 @@ Otherwise, send the line under cursor."
                   (buffer-substring-no-properties (region-beginning) (region-end))
                 (string-trim (thing-at-point 'line t)))))
     (when text
-      (aidermacs--send-command text t))))
+      (aidermacs--send-command text t t))))
 
 ;;;###autoload
 (defun aidermacs-send-region-by-line ()
@@ -770,7 +771,7 @@ and send each non-empty line to aidermacs session."
         (mapc (lambda (line)
                 (let ((trimmed (string-trim line)))
                   (when (not (string-empty-p trimmed))
-                    (aidermacs--send-command trimmed t))))
+                    (aidermacs--send-command trimmed t t))))
               lines))
     (message "No region selected.")))
 
@@ -787,7 +788,7 @@ When sending paragraph content, preserve cursor position."
                       (buffer-substring-no-properties (region-beginning) (region-end))
                     (deactivate-mark))))))
     (when text
-      (aidermacs--send-command text t))))
+      (aidermacs--send-command text t t))))
 
 ;;;###autoload
 (defun aidermacs-open-prompt-file ()
