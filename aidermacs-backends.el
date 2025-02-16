@@ -98,12 +98,25 @@ and BUFFER-NAME is the name for the aidermacs buffer."
 (defun aidermacs--send-command-backend (buffer command submit)
   "Send COMMAND to BUFFER using the appropriate backend."
   (with-current-buffer buffer
-    (setq aidermacs--last-command command
-          aidermacs--current-output nil)
-    (setq-local aidermacs--command-in-progress (not submit))
-    (if (eq aidermacs-backend 'vterm)
-        (aidermacs--send-command-vterm buffer command submit)
-      (aidermacs--send-command-comint buffer command submit))))
+    (let ((command-start (not aidermacs--command-in-progress)))
+      (setq aidermacs--last-command command
+            aidermacs--current-output nil)
+      (setq-local aidermacs--command-in-progress (not submit))
+      (let ((processed-command (cond
+                               ;; Both start and end delimiters
+                               ((and command-start submit)
+                                (concat "{aidermacs\n" command "\naidermacs}"))
+                               ;; Just start delimiter
+                               (command-start
+                                (concat "{aidermacs\n" command))
+                               ;; Just end delimiter
+                               (submit
+                                (concat command "\naidermacs}"))
+                               ;; No delimiters
+                               (t command))))
+        (if (eq aidermacs-backend 'vterm)
+            (aidermacs--send-command-vterm buffer processed-command submit)
+          (aidermacs--send-command-comint buffer processed-command submit))))))
 
 (defun aidermacs--send-command-redirect-backend (buffer command &optional callback)
   "Send COMMAND to BUFFER using the appropriate backend.
