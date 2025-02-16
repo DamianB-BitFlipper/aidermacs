@@ -104,7 +104,7 @@ Add end delimiter if COMMAND-START is nil and SUBMIT is true
 Return the processed command string."
   (cond
    ;; Full delimiters if all three conditions are true
-   ((and command-start 
+   ((and command-start
          submit
          (string-match-p "\n" command))
     (concat "{aidermacs\n" command "\naidermacs}"))
@@ -125,7 +125,7 @@ Return the processed command string."
             aidermacs--current-output nil)
       (setq-local aidermacs--command-in-progress (not submit))
       (let ((processed-command (aidermacs--process-command-delimiters 
-                               command command-start submit)))
+                                command command-start submit)))
         (if (eq aidermacs-backend 'vterm)
             (aidermacs--send-command-vterm buffer processed-command submit)
           (aidermacs--send-command-comint buffer processed-command submit))))))
