@@ -98,6 +98,28 @@ This function can be customized or redefined by the user."
   (read-string prompt initial-input 'aidermacs-read-string-history))
 
 ;;;###autoload
+(defun aidermacs-plain-read-string-with-ret (prompt &optional initial-input)
+  "Read a string from the user with PROMPT and optional INITIAL-INPUT.
+Returns a cons cell (string . submit-flag) where submit-flag is:
+- t if RET was pressed
+- nil if S-RET was pressed."
+  (let* ((map (make-sparse-keymap))
+         (return-value nil)
+         (submit-flag nil))
+    ;; Set up keymap for RET and S-RET
+    (set-keymap-parent map minibuffer-local-map)
+    (define-key map (kbd "RET") (lambda ()
+                                 (setq submit-flag t)
+                                 (exit-minibuffer)))
+    (define-key map (kbd "S-RET") (lambda ()
+                                   (setq submit-flag nil)
+                                   (exit-minibuffer)))
+    ;; Read the string with our custom keymap
+    (let ((str (read-from-minibuffer prompt initial-input map nil
+                                    'aidermacs-read-string-history)))
+      (cons str submit-flag))))
+
+;;;###autoload
 (defalias 'aidermacs-read-string 'aidermacs-plain-read-string)
 
 (eval-and-compile
