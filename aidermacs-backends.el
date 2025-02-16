@@ -108,6 +108,8 @@ Return the processed command string."
    ((and command-start
          submit
          (string-match-p "\n" command))
+    (message "Command with newlines marked: %s" 
+             (replace-regexp-in-string "\n" "Z" command))
     (concat "{aidermacs\n" command "\naidermacs}"))
    ;; Just start delimiter - when starting but not submitting
    ((and command-start (not submit))
