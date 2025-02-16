@@ -805,7 +805,9 @@ If region is active, send the selected region.
 Otherwise, send the line under cursor."
   (interactive)
   (let ((text (if (use-region-p)
-                  (buffer-substring-no-properties (region-beginning) (region-end))
+                  (prog1
+                      (buffer-substring-no-properties (region-beginning) (region-end))
+                    (deactivate-mark))
                 (string-trim (thing-at-point 'line t)))))
     (when text
       (aidermacs--send-command (concat text "\n") nil))))
