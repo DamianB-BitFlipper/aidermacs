@@ -24,7 +24,7 @@
            :desc "Start/Open Session" "a" #'aidermacs-run
            :desc "Start in Current Dir" "-" #'aidermacs-run-in-current-dir
            :desc "Change Model" "o" #'aidermacs-change-model
-           :desc "Reset Session" "R" #'aidermacs-reset
+           :desc "Reset Session" "r" #'aidermacs-reset
            :desc "Exit Session" "X" #'aidermacs-exit
            :desc "Submit in Session" "RET" #'aidermacs-submit
            :desc "Code Go Ahead" "g" #'aidermacs-code-go-ahead
@@ -32,7 +32,7 @@
            :desc "Send Text" "SPC" #'aidermacs-send-text
            :desc "Yes" "y" #'aidermacs-yes
            :desc "No" "n" #'aidermacs-no
-           :desc "Cancel" "C" #'aidermacs-cancel
+           :desc "Cancel" "q" #'aidermacs-cancel
            :desc "Undo Change" "u" #'aidermacs-undo-last-change
 
            ;; File Commands
@@ -66,7 +66,7 @@
            ;; Understanding
            :desc "Show Diff" "d" #'aidermacs-diff-maybe-magit
            :desc "Ask General Question" "Q" #'aidermacs-ask-question-general
-           :desc "Ask Question" "q" #'aidermacs-ask-question
+           :desc "Ask Question" "?" #'aidermacs-ask-question
            :desc "Explain This Code" "e" #'aidermacs-function-or-region-explain
            :desc "Explain This Symbol" "p" #'aidermacs-explain-symbol-under-point
 

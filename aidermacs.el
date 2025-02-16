@@ -154,7 +154,7 @@ This function can be customized or redefined by the user."
     ("a" "Start/Open Session" aidermacs-run)
     ("-" "Start in Current Dir" aidermacs-run-in-current-dir)
     ("o" "Change Solo Model" aidermacs-change-model)
-    ("R" "Reset Session" aidermacs-reset)
+    ("r" "Reset Session" aidermacs-reset)
     ("X" "Exit Session" aidermacs-exit)
     ("<return>" "Submit in Session" aidermacs-submit)
     ("g" "Code Go Ahead" aidermacs-code-go-ahead)
@@ -164,7 +164,7 @@ This function can be customized or redefined by the user."
     ("SPC" "Send Text" aidermacs-send-text)
     ("y" "Yes" aidermacs-yes)
     ("n" "No" aidermacs-no)
-    ("C" "Cancel" aidermacs-cancel)]
+    ("q" "Cancel" aidermacs-cancel)]
 
    ["Tools"
     ("f" "File Commands" aidermacs-transient-file-commands)
@@ -174,7 +174,7 @@ This function can be customized or redefined by the user."
    ["Understanding"
     ("d" "Show Diff" aidermacs-diff-maybe-magit)
     ("Q" "Ask General Question" aidermacs-ask-question-general)
-    ("q" "Ask Question with Context" aidermacs-ask-question)
+    ("?" "Ask Question with Context" aidermacs-ask-question)
     ("e" "Explain This Code" aidermacs-function-or-region-explain)
     ("p" "Explain This Symbol" aidermacs-explain-symbol-under-point)]
 
