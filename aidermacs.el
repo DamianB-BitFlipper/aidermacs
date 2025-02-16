@@ -816,7 +816,9 @@ Otherwise, send the line under cursor."
 When sending paragraph content, preserve cursor position."
   (interactive)
   (let ((text (if (use-region-p)
-                  (buffer-substring-no-properties (region-beginning) (region-end))
+                  (prog1
+                      (buffer-substring-no-properties (region-beginning) (region-end))
+                    (deactivate-mark))
                 (save-excursion
                   (mark-paragraph)
                   (prog1
