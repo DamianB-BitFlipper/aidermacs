@@ -108,10 +108,10 @@ Returns a cons cell (string . submit-flag) where submit-flag is:
          (submit-flag nil))
     ;; Set up keymap for RET and S-RET
     (set-keymap-parent map minibuffer-local-map)
-    (define-key map (kbd "RET") (lambda ()
+    (define-key map (kbd "RET") (lambda () (interactive)
                                   (setq submit-flag t)
                                   (exit-minibuffer)))
-    (define-key map (kbd "S-RET") (lambda ()
+    (define-key map (kbd "S-RET") (lambda () (interactive)
                                     (setq submit-flag nil)
                                     (exit-minibuffer)))
     ;; Read the string with our custom keymap
