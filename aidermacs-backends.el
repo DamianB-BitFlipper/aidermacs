@@ -102,6 +102,7 @@ Add full delimiters if:
 Add start delimiter if COMMAND-START is true and SUBMIT is nil
 Add end delimiter if COMMAND-START is nil and SUBMIT is true
 Return the processed command string."
+  (message command command-start submit)
   (cond
    ;; Full delimiters if all three conditions are true
    ((and command-start
@@ -121,7 +122,7 @@ Return the processed command string."
   "Send COMMAND to BUFFER using the appropriate backend."
   (with-current-buffer buffer
     (let* ((command-start (not aidermacs--command-in-progress))
-           (processed-command (aidermacs--process-command-delimiters 
+           (processed-command (aidermacs--process-command-delimiters
                                command command-start submit)))
       (setq aidermacs--last-command command
             aidermacs--current-output nil)

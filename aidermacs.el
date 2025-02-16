@@ -108,12 +108,12 @@ Returns a cons cell (string . submit-flag) where submit-flag is:
          (submit-flag nil))
     ;; Set up keymap for RET and S-RET
     (set-keymap-parent map minibuffer-local-map)
-    (define-key map (kbd "RET") (lambda () (interactive)
-                                  (setq submit-flag t)
-                                  (exit-minibuffer)))
-    (define-key map (kbd "S-RET") (lambda () (interactive)
-                                    (setq submit-flag nil)
-                                    (exit-minibuffer)))
+    (define-key map (kbd "<return>") (lambda () (interactive)
+                                       (setq submit-flag nil)
+                                       (exit-minibuffer)))
+    (define-key map (kbd "S-<return>") (lambda () (interactive)
+                                         (setq submit-flag t)
+                                         (exit-minibuffer)))
     ;; Read the string with our custom keymap
     (let ((str (read-from-minibuffer prompt initial-input map nil
                                      'aidermacs-read-string-history)))
