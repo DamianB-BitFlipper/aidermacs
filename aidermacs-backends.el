@@ -102,14 +102,11 @@ Add full delimiters if:
 Add start delimiter if COMMAND-START is true and SUBMIT is nil
 Add end delimiter if COMMAND-START is nil and SUBMIT is true
 Return the processed command string."
-  (message "Command: %s, Start: %s, Submit: %s" command command-start submit)
   (cond
    ;; Full delimiters if all three conditions are true
    ((and command-start
          submit
          (string-match-p "\n" command))
-    (message "Command with newlines marked: %s" 
-             (replace-regexp-in-string "\n" "Z" command))
     (concat "{aidermacs\n" command "\naidermacs}"))
    ;; Just start delimiter - when starting but not submitting
    ((and command-start (not submit))
