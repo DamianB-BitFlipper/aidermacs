@@ -120,15 +120,15 @@ Return the processed command string."
 (defun aidermacs--send-command-backend (buffer command submit)
   "Send COMMAND to BUFFER using the appropriate backend."
   (with-current-buffer buffer
-    (let ((command-start (not aidermacs--command-in-progress)))
+    (let* ((command-start (not aidermacs--command-in-progress))
+           (processed-command (aidermacs--process-command-delimiters 
+                             command command-start submit)))
       (setq aidermacs--last-command command
             aidermacs--current-output nil)
       (setq-local aidermacs--command-in-progress (not submit))
-      (let ((processed-command (aidermacs--process-command-delimiters 
-                                command command-start submit)))
-        (if (eq aidermacs-backend 'vterm)
-            (aidermacs--send-command-vterm buffer processed-command submit)
-          (aidermacs--send-command-comint buffer processed-command submit))))))
+      (if (eq aidermacs-backend 'vterm)
+          (aidermacs--send-command-vterm buffer processed-command submit)
+        (aidermacs--send-command-comint buffer processed-command submit)))))
 
 (defun aidermacs--send-command-redirect-backend (buffer command &optional callback)
   "Send COMMAND to BUFFER using the appropriate backend.
