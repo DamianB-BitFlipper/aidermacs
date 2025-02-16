@@ -145,6 +145,7 @@ CALLBACK if provided will be called with the command output when available."
 (defun aidermacs--send-cancel-backend (buffer)
   "Send cancel signal (Ctrl-C) to BUFFER using the appropriate backend."
   (with-current-buffer buffer
+    (setq-local aidermacs--command-in-progress nil)  ; Reset the in-progress flag
     (if (eq aidermacs-backend 'vterm)
         (aidermacs--send-cancel-vterm buffer)
       (aidermacs--send-cancel-comint buffer))))
