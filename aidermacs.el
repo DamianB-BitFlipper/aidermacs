@@ -808,7 +808,7 @@ Otherwise, send the line under cursor."
                   (buffer-substring-no-properties (region-beginning) (region-end))
                 (string-trim (thing-at-point 'line t)))))
     (when text
-      (aidermacs--send-command text nil))))
+      (aidermacs--send-command (concat text "\n") nil))))
 
 ;;;###autoload
 (defun aidermacs-send-block-or-region ()
@@ -823,7 +823,7 @@ When sending paragraph content, preserve cursor position."
                       (buffer-substring-no-properties (region-beginning) (region-end))
                     (deactivate-mark))))))
     (when text
-      (aidermacs--send-command text nil))))
+      (aidermacs--send-command (concat text "\n") nil))))
 
 ;;;###autoload
 (defun aidermacs-send-region-line-by-line ()
