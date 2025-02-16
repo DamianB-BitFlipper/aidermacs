@@ -94,21 +94,23 @@ and BUFFER-NAME is the name for the aidermacs buffer."
 
 (defun aidermacs--send-command-backend (buffer command submit)
   "Send COMMAND to BUFFER using the appropriate backend."
-  (setq aidermacs--last-command command
-        aidermacs--current-output nil)
-  (if (eq aidermacs-backend 'vterm)
-      (aidermacs--send-command-vterm buffer command submit)
-    (aidermacs--send-command-comint buffer command submit)))
+  (with-current-buffer buffer
+    (setq aidermacs--last-command command
+          aidermacs--current-output nil)
+    (if (eq aidermacs-backend 'vterm)
+        (aidermacs--send-command-vterm buffer command submit)
+      (aidermacs--send-command-comint buffer command submit))))
 
 (defun aidermacs--send-command-redirect-backend (buffer command &optional callback)
   "Send COMMAND to BUFFER using the appropriate backend.
 CALLBACK if provided will be called with the command output when available."
-  (setq aidermacs--last-command command
-        aidermacs--current-output nil
-        aidermacs--current-callback callback)
-  (if (eq aidermacs-backend 'vterm)
-      (aidermacs--send-command-vterm buffer command)
-    (aidermacs--send-command-redirect-comint buffer command)))
+  (with-current-buffer buffer
+    (setq aidermacs--last-command command
+          aidermacs--current-output nil
+          aidermacs--current-callback callback)
+    (if (eq aidermacs-backend 'vterm)
+        (aidermacs--send-command-vterm buffer command)
+      (aidermacs--send-command-redirect-comint buffer command))))
 
 (defun aidermacs--send-cancel-backend (buffer)
   "Send cancel signal (Ctrl-C) to BUFFER using the appropriate backend."
