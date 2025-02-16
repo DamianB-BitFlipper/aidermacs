@@ -92,11 +92,15 @@ and BUFFER-NAME is the name for the aidermacs buffer."
    (t
     (aidermacs-run-comint program args buffer-name))))
 
+(defvar-local aidermacs--command-in-progress nil
+  "Track whether a command is being accumulated but not yet submitted.")
+
 (defun aidermacs--send-command-backend (buffer command submit)
   "Send COMMAND to BUFFER using the appropriate backend."
   (with-current-buffer buffer
     (setq aidermacs--last-command command
           aidermacs--current-output nil)
+    (setq-local aidermacs--command-in-progress (not submit))
     (if (eq aidermacs-backend 'vterm)
         (aidermacs--send-command-vterm buffer command submit)
       (aidermacs--send-command-comint buffer command submit))))
