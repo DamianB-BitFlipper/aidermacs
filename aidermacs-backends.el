@@ -112,9 +112,10 @@ CALLBACK if provided will be called with the command output when available."
 
 (defun aidermacs--send-cancel-backend (buffer)
   "Send cancel signal (Ctrl-C) to BUFFER using the appropriate backend."
-  (if (eq aidermacs-backend 'vterm)
-      (aidermacs--send-cancel-vterm buffer)
-    (aidermacs--send-cancel-comint buffer)))
+  (with-current-buffer buffer
+    (if (eq aidermacs-backend 'vterm)
+        (aidermacs--send-cancel-vterm buffer)
+      (aidermacs--send-cancel-comint buffer))))
 
 (provide 'aidermacs-backends)
 

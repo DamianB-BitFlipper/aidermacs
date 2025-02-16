@@ -102,8 +102,7 @@ When SUBMIT is non-nil, send a return after the command."
 
 (defun aidermacs--send-cancel-vterm (buffer)
   "Send Ctrl-C to the aidermacs vterm BUFFER to cancel current operation."
-  (with-current-buffer buffer
-    (vterm-send-C-c)))
+  (vterm-send-C-c))
 
 (provide 'aidermacs-backend-vterm)
 
