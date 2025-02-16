@@ -95,6 +95,28 @@ and BUFFER-NAME is the name for the aidermacs buffer."
 (defvar-local aidermacs--command-in-progress nil
   "Track whether a command is being accumulated but not yet submitted.")
 
+(defun aidermacs--process-command-delimiters (command command-start submit)
+  "Process COMMAND adding delimiters based on COMMAND-START and SUBMIT flags.
+Add full delimiters if:
+- COMMAND-START, SUBMIT and command contains newlines are all true
+Add start delimiter if COMMAND-START is true and SUBMIT is nil
+Add end delimiter if COMMAND-START is nil and SUBMIT is true
+Return the processed command string."
+  (cond
+   ;; Full delimiters if all three conditions are true
+   ((and command-start 
+         submit
+         (string-match-p "\n" command))
+    (concat "{aidermacs\n" command "\naidermacs}"))
+   ;; Just start delimiter - when starting but not submitting
+   ((and command-start (not submit))
+    (concat "{aidermacs\n" command))
+   ;; Just end delimiter - when submitting but not starting
+   ((and (not command-start) submit)
+    (concat command "\naidermacs}"))
+   ;; No delimiters
+   (t command)))
+
 (defun aidermacs--send-command-backend (buffer command submit)
   "Send COMMAND to BUFFER using the appropriate backend."
   (with-current-buffer buffer
@@ -102,18 +124,8 @@ and BUFFER-NAME is the name for the aidermacs buffer."
       (setq aidermacs--last-command command
             aidermacs--current-output nil)
       (setq-local aidermacs--command-in-progress (not submit))
-      (let ((processed-command (cond
-                               ;; Both start and end delimiters
-                               ((and command-start submit)
-                                (concat "{aidermacs\n" command "\naidermacs}"))
-                               ;; Just start delimiter
-                               (command-start
-                                (concat "{aidermacs\n" command))
-                               ;; Just end delimiter
-                               (submit
-                                (concat command "\naidermacs}"))
-                               ;; No delimiters
-                               (t command))))
+      (let ((processed-command (aidermacs--process-command-delimiters 
+                               command command-start submit)))
         (if (eq aidermacs-backend 'vterm)
             (aidermacs--send-command-vterm buffer processed-command submit)
           (aidermacs--send-command-comint buffer processed-command submit))))))
