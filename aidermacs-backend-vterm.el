@@ -95,10 +95,9 @@ and BUFFER-NAME is the name of the vterm buffer."
 (defun aidermacs--send-command-vterm (buffer command submit)
   "Send COMMAND to the aidermacs vterm BUFFER.
 When SUBMIT is non-nil, send a return after the command."
-  (with-current-buffer buffer
-    (vterm-send-string command)
-    (when submit
-      (vterm-send-return))))
+  (vterm-send-string command)
+  (when submit
+    (vterm-send-return)))
 
 (defun aidermacs--send-cancel-vterm (buffer)
   "Send Ctrl-C to the aidermacs vterm BUFFER to cancel current operation."

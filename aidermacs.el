@@ -273,7 +273,7 @@ to the aidermacs buffer."
          (buffer (or (get-buffer buffer-name)
                      (progn (aidermacs-run)
                             (get-buffer buffer-name))))
-         (processed-command (aidermacs--process-message-if-multi-line command)))
+         (processed-command command))
     (aidermacs--send-command-backend buffer processed-command submit)
     (when (and switch-to-buffer (not (string= (buffer-name) buffer-name)))
       (aidermacs-switch-to-buffer))))
@@ -285,7 +285,7 @@ CALLBACK will be called with the command output when available."
          (buffer (or (get-buffer buffer-name)
                      (progn (aidermacs-run)
                             (get-buffer buffer-name))))
-         (processed-command (aidermacs--process-message-if-multi-line command)))
+         (processed-command command))
     (aidermacs--send-command-redirect-backend buffer processed-command callback)))
 
 
@@ -378,16 +378,6 @@ If the current buffer is already the aidermacs buffer, do nothing."
   "Send \"No\" to the aidermacs buffer and submit."
   (interactive)
   (aidermacs--send-command "No" t))
-
-(defun aidermacs--process-message-if-multi-line (str)
-  "Entering multi-line chat messages
-https://aidermacs.chat/docs/usage/commands.html#entering-multi-line-chat-messages
-If STR contains newlines and isn't already wrapped in {aidermacs...aidermacs},
-wrap it in {aidermacs\nstr\naidermacs}. Otherwise return STR unchanged."
-  (if (and (string-match-p "\n" str)
-           (not (string-match-p "^{aidermacs\n.*\naidermacs}$" str)))
-      (format "{aidermacs\n%s\naidermacs}" str)
-    str))
 
 ;;;###autoload
 (defun aidermacs-act-on-current-file (command-prefix)

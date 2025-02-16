@@ -224,7 +224,7 @@ This allows for multi-line input without sending the command."
 (defun aidermacs-input-sender (proc string)
   "Reset font-lock state before executing a command."
   (aidermacs-reset-font-lock-state)
-  (comint-simple-send proc (aidermacs--process-message-if-multi-line string)))
+  (comint-simple-send proc string))
 
 (defun aidermacs-run-comint (program args buffer-name)
   "Create a comint-based buffer and run aidermacs PROGRAM with ARGS in BUFFER-NAME."
@@ -249,36 +249,34 @@ This allows for multi-line input without sending the command."
 (defun aidermacs--send-command-comint (buffer command submit)
   "Send COMMAND to the aidermacs comint BUFFER.
 When SUBMIT is non-nil, append a newline to submit the command."
-  (with-current-buffer buffer
-    (let ((process (get-buffer-process buffer))
-          (inhibit-read-only t))
-      (goto-char (process-mark process))
-      (aidermacs-reset-font-lock-state)
-      (insert (propertize command
-                          'face 'aidermacs-command-text
-                          'font-lock-face 'aidermacs-command-text
-                          'rear-nonsticky t))
-      (set-marker (process-mark process) (point))
-      (comint-send-string process (if submit
-                                      (concat command "\n")
-                                    command)))))
+  (let ((process (get-buffer-process buffer))
+        (inhibit-read-only t))
+    (goto-char (process-mark process))
+    (aidermacs-reset-font-lock-state)
+    (insert (propertize command
+                        'face 'aidermacs-command-text
+                        'font-lock-face 'aidermacs-command-text
+                        'rear-nonsticky t))
+    (set-marker (process-mark process) (point))
+    (comint-send-string process (if submit
+                                    (concat command "\n")
+                                  command))))
 
 (defun aidermacs--send-command-redirect-comint (buffer command)
   "Send COMMAND to the aidermacs comint BUFFER and collect result into OUTPUT-BUFFER."
-  (with-current-buffer buffer
-    (let ((process (get-buffer-process buffer))
-          (output-buffer (get-buffer-create " *aider-redirect-buffer*")))
-      (with-current-buffer output-buffer
-        (erase-buffer))
-      (goto-char (process-mark process))
-      (comint-redirect-send-command command output-buffer nil t)
-      (unwind-protect
-          (while (or quit-flag (null comint-redirect-completed))
-            (accept-process-output nil 0.1))
-        (unless comint-redirect-completed
-          (comint-redirect-cleanup)))
-      (aidermacs--store-output (with-current-buffer output-buffer
-                                 (buffer-string))))))
+  (let ((process (get-buffer-process buffer))
+        (output-buffer (get-buffer-create " *aider-redirect-buffer*")))
+    (with-current-buffer output-buffer
+      (erase-buffer))
+    (goto-char (process-mark process))
+    (comint-redirect-send-command command output-buffer nil t)
+    (unwind-protect
+        (while (or quit-flag (null comint-redirect-completed))
+          (accept-process-output nil 0.1))
+      (unless comint-redirect-completed
+        (comint-redirect-cleanup)))
+    (aidermacs--store-output (with-current-buffer output-buffer
+                               (buffer-string)))))
 
 (defun aidermacs--send-cancel-comint (buffer)
   "Send Ctrl-C to the aidermacs comint BUFFER to cancel current operation."
