@@ -457,11 +457,13 @@ If the current buffer is already the aidermacs buffer, do nothing."
 (defun aidermacs-send-text ()
   "Send arbitrary text to the aidermacs buffer.
 Prompts for user input and sends the entered text directly to aider.
-It can be a /command or any text. The text is added to the input buffer
-without being submitted."
+It can be a /command or any text.
+Use RET to submit the text, S-RET to add to input buffer without submitting."
   (interactive)
-  (let ((text (aidermacs-read-string "Enter text to send: ")))
-    (aidermacs--send-command text nil)))
+  (let* ((result (aidermacs-read-string-with-ret "Enter text to send: "))
+         (text (car result))
+         (submit (cdr result)))
+    (aidermacs--send-command text submit)))
 
 ;; New function to get command from user and send it prefixed with "/code "
 ;;;###autoload
