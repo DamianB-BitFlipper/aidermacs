@@ -109,22 +109,24 @@ Returns a cons cell (string . submit-flag) where submit-flag is:
     ;; Set up keymap for RET and S-RET
     (set-keymap-parent map minibuffer-local-map)
     (define-key map (kbd "RET") (lambda ()
-                                 (setq submit-flag t)
-                                 (exit-minibuffer)))
+                                  (setq submit-flag t)
+                                  (exit-minibuffer)))
     (define-key map (kbd "S-RET") (lambda ()
-                                   (setq submit-flag nil)
-                                   (exit-minibuffer)))
+                                    (setq submit-flag nil)
+                                    (exit-minibuffer)))
     ;; Read the string with our custom keymap
     (let ((str (read-from-minibuffer prompt initial-input map nil
-                                    'aidermacs-read-string-history)))
+                                     'aidermacs-read-string-history)))
       (cons str submit-flag))))
 
 ;;;###autoload
 (defalias 'aidermacs-read-string 'aidermacs-plain-read-string)
+(defalias 'aidermacs-read-string-with-ret 'aidermacs-plain-read-string-with-ret)
 
 (eval-and-compile
   ;; Ensure the alias is always available in both compiled and interpreted modes.
-  (defalias 'aidermacs-read-string 'aidermacs-plain-read-string))
+  (defalias 'aidermacs-read-string 'aidermacs-plain-read-string)
+  (defalias 'aidermacs-read-string-with-ret 'aidermacs-plain-read-string-with-ret))
 
 ;; Transient menu for aidermacs commands
 ;; The instruction in the autoload comment is needed, see
