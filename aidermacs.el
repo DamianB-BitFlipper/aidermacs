@@ -104,9 +104,8 @@ Returns a cons cell (string . submit-flag) where submit-flag is:
 - t if RET was pressed
 - nil if S-RET was pressed."
   (let* ((map (make-sparse-keymap))
-         (return-value nil)
          (submit-flag nil))
-    ;; Set up keymap for RET and S-RET
+    ;; Set up keymap for <return> and S-<return>
     (set-keymap-parent map minibuffer-local-map)
     (define-key map (kbd "<return>") (lambda () (interactive)
                                        (setq submit-flag nil)
@@ -836,7 +835,9 @@ Otherwise, send the line under cursor."
                     (deactivate-mark))
                 (string-trim (thing-at-point 'line t)))))
     (when text
-      (aidermacs--send-command (concat text "\n") nil))))
+      ;; Wrap in newlines since this is typically context
+      ;; added following/followed by more instructions
+      (aidermacs--send-command (concat "\n" text "\n") nil))))
 
 ;;;###autoload
 (defun aidermacs-send-block-or-region ()
@@ -853,7 +854,9 @@ When sending paragraph content, preserve cursor position."
                       (buffer-substring-no-properties (region-beginning) (region-end))
                     (deactivate-mark))))))
     (when text
-      (aidermacs--send-command (concat text "\n") nil))))
+      ;; Wrap in newlines since this is typically context
+      ;; added following/followed by more instructions
+      (aidermacs--send-command (concat "\n" text "\n") nil))))
 
 ;;;###autoload
 (defun aidermacs-send-region-line-by-line ()
