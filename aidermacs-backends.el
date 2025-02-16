@@ -114,7 +114,7 @@ Return the processed command string."
    ;; Just end delimiter - when submitting but not starting
    ((and (not command-start) submit)
     (concat command "\naidermacs}"))
-   ;; No delimiters
+   ;; No delimiters, just insert the text
    (t command)))
 
 (defun aidermacs--send-command-backend (buffer command submit)
@@ -122,7 +122,7 @@ Return the processed command string."
   (with-current-buffer buffer
     (let* ((command-start (not aidermacs--command-in-progress))
            (processed-command (aidermacs--process-command-delimiters 
-                             command command-start submit)))
+                               command command-start submit)))
       (setq aidermacs--last-command command
             aidermacs--current-output nil)
       (setq-local aidermacs--command-in-progress (not submit))
