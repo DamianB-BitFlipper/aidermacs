@@ -102,7 +102,7 @@ Add full delimiters if:
 Add start delimiter if COMMAND-START is true and SUBMIT is nil
 Add end delimiter if COMMAND-START is nil and SUBMIT is true
 Return the processed command string."
-  (message command command-start submit)
+  (message "Command: %s, Start: %s, Submit: %s" command command-start submit)
   (cond
    ;; Full delimiters if all three conditions are true
    ((and command-start
