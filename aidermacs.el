@@ -295,9 +295,8 @@ to the aidermacs buffer."
   (let* ((buffer-name (aidermacs-buffer-name))
          (buffer (or (get-buffer buffer-name)
                      (progn (aidermacs-run)
-                            (get-buffer buffer-name))))
-         (processed-command command))
-    (aidermacs--send-command-backend buffer processed-command submit)
+                            (get-buffer buffer-name)))))
+    (aidermacs--send-command-backend buffer command submit)
     (when (and switch-to-buffer (not (string= (buffer-name) buffer-name)))
       (aidermacs-switch-to-buffer))))
 
